@@ -69,7 +69,7 @@ const RegistrationForm = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' }}>
-          <h2>Registration Form (New)</h2>
+          <h2>Registration Form</h2>
           <label>Username: <input type="text" name="username" value={formData.username} onChange={handleChange} required /></label>
           <label>Firstname: <input type="text" name="firstname" value={formData.firstname} onChange={handleChange} required /></label>
           <label>Lastname: <input type="text" name="lastname" value={formData.lastname} onChange={handleChange} required /></label>

@@ -45,7 +45,7 @@ const OldRegistrationForm = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-      <h2>Registration Form (Old)</h2>
+      <h2>Registration Form</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' }}>
         <label>Username: <input type="text" name="username" onChange={handleChange} /></label>
         <label>Firstname: <input type="text" name="firstname" onChange={handleChange} /></label>
