@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const RegistrationForm = () => {
   const genderOptions = [
@@ -28,6 +28,8 @@ const RegistrationForm = () => {
   });
   
   const [hobbies, setHobbies] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const hobbyRef = useRef([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,62 +37,80 @@ const RegistrationForm = () => {
   };
 
   const onHobbiesToggle = (event) => {
-    const targetValue = event.target.value;
-    const isChecked = event.target.checked;
-    
-    if (!isChecked) {
-      setHobbies((prev) => prev.filter((item) => item !== targetValue));
+    const { value, checked } = event.target;
+    if (checked) {
+      setHobbies([...hobbies, value]);
     } else {
-      setHobbies((prev) => [...prev, targetValue]);
+      setHobbies(hobbies.filter((h) => h !== value));
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+  };
+
+  const handleBack = () => {
+    setIsSubmitted(false);
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Registration Form</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' }}>
-        <label>Username: <input type="text" name="username" onChange={handleChange} /></label>
-        <label>Firstname: <input type="text" name="firstname" onChange={handleChange} /></label>
-        <label>Lastname: <input type="text" name="lastname" onChange={handleChange} /></label>
-        
-        <div>
-          <label>Gender: </label>
-          {genderOptions.map(opt => (
-            <label key={opt.id} style={{ marginRight: '10px' }}>
-              <input type="radio" name="gender" value={opt.label} onChange={handleChange} /> {opt.label}
-            </label>
-          ))}
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
+      {isSubmitted ? (
+        <div style={{ textAlign: 'left' }}>
+          <h2>Submission Data</h2>
+          <p><strong>Username:</strong> {formData.username}</p>
+          <p><strong>Firstname:</strong> {formData.firstname}</p>
+          <p><strong>Lastname:</strong> {formData.lastname}</p>
+          <p><strong>Gender:</strong> {formData.gender}</p>
+          <p><strong>Hobbies:</strong> {hobbies.join(", ")}</p>
+          <p><strong>Role:</strong> {formData.role}</p>
+          <button onClick={handleBack} style={{ marginTop: '20px' }}>Go Back to Form</button>
         </div>
-
-        <div>
-          <label>Hobbies: </label>
-          {hobbyOptions.map(h => (
-            <label key={h.id} style={{ marginRight: '10px' }}>
-              <input type="checkbox" value={h.label} onChange={onHobbiesToggle} /> {h.label}
-            </label>
-          ))}
-        </div>
-
-        <label>Role: 
-          <select name="role" onChange={handleChange}>
-            {roleOptions.map(r => (
-              <option key={r.value} value={r.value}>{r.label}</option>
+      ) : (
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' }}>
+          <h2>Registration Form</h2>
+          <label>Username: <input type="text" name="username" value={formData.username} onChange={handleChange} required /></label>
+          <label>Firstname: <input type="text" name="firstname" value={formData.firstname} onChange={handleChange} required /></label>
+          <label>Lastname: <input type="text" name="lastname" value={formData.lastname} onChange={handleChange} required /></label>
+          
+          <div>
+            <label>Gender: </label>
+            {genderOptions.map(opt => (
+              <label key={opt.id} style={{ marginRight: '10px' }}>
+                <input type="radio" name="gender" value={opt.label} checked={formData.gender === opt.label} onChange={handleChange} /> {opt.label}
+              </label>
             ))}
-          </select>
-        </label>
-      </div>
+          </div>
 
-      <hr style={{ margin: '20px 0' }} />
+          <div>
+            <label>Hobbies: </label>
+            {hobbyOptions.map((item, index) => (
+              <label key={item.id} style={{ marginRight: '10px' }}>
+                <input 
+                  type="checkbox" 
+                  id={item.id} 
+                  name="hobbies" 
+                  value={item.label} 
+                  checked={hobbies.includes(item.label)}
+                  ref={el => hobbyRef.current[index] = el}
+                  onChange={onHobbiesToggle} 
+                /> {item.label}
+              </label>
+            ))}
+          </div>
 
-      
-      <div style={{ padding: '15px', background: 'transparent' }}>
-        <p><strong>Username:</strong> {formData.username}</p>
-        <p><strong>Firstname:</strong> {formData.firstname}</p>
-        <p><strong>Lastname:</strong> {formData.lastname}</p>
-        <p><strong>Gender:</strong> {formData.gender}</p>
-        <p><strong>Hobbies:</strong> {hobbies.join(", ")}</p>
-        <p><strong>Role:</strong> {formData.role}</p>
-      </div>
+          <label>Apply Role: 
+            <select name="role" value={formData.role} onChange={handleChange}>
+              {roleOptions.map(r => (
+                <option key={r.value} value={r.value}>{r.label}</option>
+              ))}
+            </select>
+          </label>
+
+          <button type="submit" style={{ marginTop: '10px' }}>Submit</button>
+        </form>
+      )}
     </div>
   );
 };
