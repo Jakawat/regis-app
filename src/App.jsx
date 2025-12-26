@@ -3,7 +3,7 @@ import RegistrationForm from './RegistrationForm';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/regis-app-deploy">
       <Routes>
         <Route path="/" element={<RegistrationForm />} />
       </Routes>
