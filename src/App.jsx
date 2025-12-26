@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm';
 import OldRegistrationForm from './OldRegistrationForm';
 
 function App() {
   return (
-    <BrowserRouter basename="/regis-app-deploy">
+    <HashRouter>
       <Routes>
         <Route path="/" element={<RegistrationForm />} />
         <Route path="/old" element={<OldRegistrationForm />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
